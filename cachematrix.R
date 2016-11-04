@@ -1,20 +1,39 @@
-## Put comments here that give an overall description of what your
-## functions do
+## This function will make a matrix, in this example a five (rows) by five (columns) this matrix is later used for testing inverse
+## This matrix is assigned as k
 
-## Write a short comment describing this function
+
+
+k <- matrix(1:25, nrow=5) 
+
+## The function below is used to make a cachematrix
 
 makeCacheMatrix <- function(x = matrix()) {
- #creates a matrix for the assignment, with two rows and four columns to, this is then filled
- #from 1 to 8 by columns (default setting)
- 
- matrix(1:8, nrow=2) 
- 
+        inv <- NULL
+        set <- function(y) {
+                x <<- y
+                inv <<- NULL
+        }
+        get <- function() x
+        setinverse <- function(inverse) inv <<- inverse
+        getinverse <- function() inv
+        list(set=set, get=get, setinverse=setinverse, getinverse=getinverse)
 }
 
 
-## Write a short comment describing this function
+## This function will solve inverse matrix, please assign previously created k matrix to this function in order to test solving
 
 cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
-        solve(makeCacheMatrix)
+        inv <- x$getinverse()
+        if(!is.null(inv)) {
+                message("getting cached data.")
+                return(inv)
+        }
+        data <- x$get()
+        inv <- solve(data)
+        x$setinverse(inv)
+        inv
 }
+
+## test by running x = cachematrix(k)
+## and then cachesolve(x)
+## matrix doesnt compute, i believe this is because matrix is too uniform
